@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To do list</title>
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>To Do List</h1>
+
+  <div>
+    <label for="title">Title:</label>
+    <input type="text" id="title" placeholder="Enter task title">
+
+    <label for="description">Description:</label>
+    <textarea id="description" placeholder="Enter task description"></textarea>
+
+    <label for="dueDate">Due Date:</label>
+    <input type="date" id="dueDate">
+
+    <button onclick="addTask()">Add Task</button>
+  </div>
+
+  <h2>Task List</h2>
+  <ul id="taskList">
+  </ul>
+
+  <script>
+    // Sample tasks
+    var tasks = [
+      { id: 1, title: "Task 1", description: "Description for Task 1", dueDate: "2024-01-15", status: "Incomplete" },
+      { id: 2, title: "Task 2", description: "Description for Task 2", dueDate: "2024-01-20", status: "Incomplete" }
+    ];
+
+    // Initial rendering of tasks
+    renderTasks();
+
+    function addTask() {
+      var titleInput = document.getElementById("title");
+      var descriptionInput = document.getElementById("description");
+      var dueDateInput = document.getElementById("dueDate");
+
+      var title = titleInput.value;
+      var description = descriptionInput.value;
+      var dueDate = dueDateInput.value;
+
+      if (title.trim() !== "") {
+      
+        var newTask = {
+          id: tasks.length + 1,
+          title: title,
+          description: description,
+          dueDate: dueDate,
+          status: "Incomplete"
+        };
+
+        
+        tasks.push(newTask);
+
+       
+        titleInput.value = "";
+        descriptionInput.value = "";
+        dueDateInput.value = "";
+
+        
+        renderTasks();
+      }
+    }
+
+    function renderTasks() {
+      var taskList = document.getElementById("taskList");
+      taskList.innerHTML = ""; 
+
+      tasks.forEach(function(task) {
+        var li = document.createElement("li");
+
+        li.innerHTML = "<strong>Title:</strong> " + task.title +
+                       "<br><strong>Description:</strong> " + task.description +
+                       "<br><strong>Due Date:</strong> " + task.dueDate +
+                       "<br><strong>Status:</strong> " + task.status +
+                       "<br><button onclick='editTask(" + task.id + ")'>Edit</button>" +
+                       "<button onclick='deleteTask(" + task.id + ")'>Delete</button>" +
+                       "<button onclick='updateTaskStatus(" + task.id + ")'>Toggle Status</button>" +
+                       "<button onclick='viewTaskDetails(" + task.id + ")'>Details</button>";
+
+        li.style.backgroundColor = task.status === "Incomplete" ? "#FFCCCC" : "#CCFFCC";
+        taskList.appendChild(li);
+      });
+    }
+
+    function editTask(taskId) {
+    
+      console.log("Edit task with ID: " + taskId);
+    }
+
+    function deleteTask(taskId) {
+    
+      var taskIndex = tasks.findIndex(function(task) {
+        return task.id === taskId;
+      });
+
+      if (taskIndex !== -1) {
+        tasks.splice(taskIndex, 1);
+
+        
+        renderTasks();
+      }
+    }
+
+    function updateTaskStatus(taskId) {
+    
+      var task = tasks.find(function(t) {
+        return t.id === taskId;
+      });
+
+     
+      task.status = task.status === "Incomplete" ? "Complete" : "Incomplete";
+
+    
+      renderTasks();
+    }
+
+    function viewTaskDetails(taskId) {
+  
+      var task = tasks.find(function(t) {
+        return t.id === taskId;
+      });
+
+      alert("Task Details:\n\nTitle: " + task.title + "\nDescription: " + task.description +
+            "\nDue Date: " + task.dueDate + "\nStatus: " + task.status);
+    }
+  </script>
+
+</body>
+</html>
